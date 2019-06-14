@@ -10,17 +10,21 @@
         </ul>
       </nav>
     </header>
-    <home-page msg="Welcome to Your Vue.js App"/>
+    <main>
+      <RobotBuilder/>
+    </main>
+    <!-- <home-page msg="Welcome to Your Vue.js App"/> -->
   </div>
 </template>
 
 <script>
-import HomePage from './components/HomePage.vue';
+// import HomePage from './home/HomePage.vue';
+import RobotBuilder from './build/RobotBuilder.vue';
 
 export default {
   name: 'app',
   components: {
-    HomePage,
+    RobotBuilder,
   },
 };
 </script>
@@ -38,7 +42,7 @@ body {
 main {
   margin: 0 auto;
   padding: 30px;
-  background-color: 1024px;
+  background-color: white;
   min-height: 300px;
 }
 
