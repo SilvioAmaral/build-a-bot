@@ -2,7 +2,8 @@
   <div class="content">
     <button class="add-to-cart" @click="addToCart()">Add</button>
     <div class="top-row">
-      <div class="top part">
+      <div class="top part"
+          :style="headBorderStyle">
         <div class="robotName">
           {{selectedRobot.head.title}}
           <span v-if="selectedRobot.head.onSale" class="sale">Sale!</span>
@@ -71,6 +72,9 @@ function getNextValidIndex(index, length) {
 
 export default {
   name: 'RobotBuilder',
+  created() {
+    console.log('component created lifecycle hook');
+  },
   data() {
     return {
       availableParts,
@@ -91,6 +95,14 @@ export default {
         rightArm: availableParts.arms[this.selectedRightArmIndex],
         base: availableParts.bases[this.selectedBaseIndex],
       };
+    },
+    headBorderStyle() {
+      // note how to send styles with dashes
+      return this.selectedRobot.head.onSale ? {
+        borderWidth: '3px',
+        'border-color': 'red',
+        borderStyle: 'solid',
+      } : {};
     },
   },
   methods: {
@@ -167,15 +179,16 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" computed>
 .part {
   position: relative;
   width:165px;
   height:165px;
   border: 3px solid #aaa;
-}
-.part img {
-  width:165px;
+
+  img {
+    width:165px;
+  }
 }
 .top-row {
   display:flex;
