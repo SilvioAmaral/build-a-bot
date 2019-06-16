@@ -1,35 +1,57 @@
 <template>
-  <div>
+  <div class="content">
+    <button class="add-to-cart" @click="addToCart()">Add</button>
     <div class="top-row">
       <div class="top part">
-        <img :src="availableParts.heads[selectedHeadIndex].src" title="head"/>
+        <div class="robotName">
+          {{selectedRobot.head.title}}
+          <span v-if="selectedRobot.head.onSale" class="sale">Sale!</span>
+        </div>
+        <img :src="selectedRobot.head.src" title="head"/>
         <button class="prev-selector" @click="selectPreviousHead()">&#9668;</button>
         <button class="next-selector" @click="selectNextHead()">&#9658;</button>
       </div>
     </div>
     <div class="middle-row">
       <div class="left part">
-        <img :src="availableParts.arms[selectedLeftArmIndex].src" title="left arm"/>
+        <img :src="selectedRobot.leftArm.src" title="left arm"/>
         <button class="prev-selector" @click="selectPreviousLeftArm()">&#9650;</button>
         <button class="next-selector" @click="selectNextLeftArm()">&#9660;</button>
       </div>
       <div class="center part">
-        <img :src="availableParts.torsos[selectedTorsoIndex].src" title="right arm"/>
+        <img :src="selectedRobot.torso.src" title="right arm"/>
         <button class="prev-selector" @click="selectPreviousTorso()">&#9668;</button>
         <button class="next-selector" @click="selectNextTorso()">&#9658;</button>
       </div>
       <div class="right part">
-        <img :src="availableParts.arms[selectedRightArmIndex].src" title="torso"/>
+        <img :src="selectedRobot.rightArm.src" title="torso"/>
         <button class="prev-selector" @click="selectPreviousRightArm()">&#9650;</button>
         <button class="next-selector" @click="selectNextRightArm()">&#9660;</button>
       </div>
     </div>
     <div class="bottom-row">
       <div class="bottom part">
-        <img :src="availableParts.bases[selectedBaseIndex].src" title="base"/>
+        <img :src="selectedRobot.base.src" title="base"/>
         <button class="prev-selector" @click="selectPreviousBase()">&#9668;</button>
         <button class="next-selector" @click="selectNextBase()">&#9658;</button>
       </div>
+    </div>
+    <div>
+      <h1>Cart</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Robot</th>
+            <th class="cost">Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(robot, index) in cart" :key="index">
+            <td>{{robot.head.title}}</td>
+            <td>{{robot.cost}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -57,9 +79,30 @@ export default {
       selectedRightArmIndex: 0,
       selectedTorsoIndex: 0,
       selectedBaseIndex: 0,
+      cart: [],
     };
   },
+  computed: {
+    selectedRobot() {
+      return {
+        head: availableParts.heads[this.selectedHeadIndex],
+        leftArm: availableParts.arms[this.selectedLeftArmIndex],
+        torso: availableParts.torsos[this.selectedTorsoIndex],
+        rightArm: availableParts.arms[this.selectedRightArmIndex],
+        base: availableParts.bases[this.selectedBaseIndex],
+      };
+    },
+  },
   methods: {
+    addToCart() {
+      const robot = this.selectedRobot;
+      const cost = robot.head.cost
+        + robot.leftArm.cost
+        + robot.torso.cost
+        + robot.rightArm.cost
+        + robot.base.cost;
+      this.cart.push(Object.assign({}, robot, { cost }));
+    },
     selectNextHead() {
       this.selectedHeadIndex = getNextValidIndex(
         this.selectedHeadIndex,
@@ -212,5 +255,32 @@ export default {
 }
 .right .next-selector {
   right: -3px;
+}
+.robotName {
+  position: absolute;
+  top: -25px;
+  text-align: center;
+  width: 100%;
+}
+.sale {
+  color: red;
+}
+.content {
+  position: relative;
+}
+.add-to-cart {
+  position: absolute;
+  right: 30px;
+  width: 220px;
+  padding: 3px;
+  font-size: 16px;
+}
+td, th {
+  text-align: left;
+  padding: 5px;
+  padding-right: 20px;
+}
+.cost {
+  text-align: right;
 }
 </style>
