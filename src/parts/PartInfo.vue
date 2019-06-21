@@ -10,9 +10,18 @@ import parts from '../data/parts';
 
 export default {
   name: 'PartInfo',
+  props: {
+    partType: { type: String },
+    id: {
+      type: [String, Number],
+      validator(param) {
+        return Number.isInteger(Number(param));
+      },
+    },
+  },
   computed: {
     part() {
-      const { partType, id } = this.$route.params;
+      const { partType, id } = this;
       return parts[partType].find(part => part.id === +id);
     },
   },
