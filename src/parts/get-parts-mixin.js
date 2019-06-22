@@ -10,7 +10,7 @@ export default {
         torsos: [],
         bases: [],
       };
-      return this.$store.state.parts || empty;
+      return this.$store.state.robots.parts || empty;
     },
   },
 };
